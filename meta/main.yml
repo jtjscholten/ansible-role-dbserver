@@ -1,0 +1,23 @@
+---
+galaxy_info:
+  role_name: dbserver
+  author: Jeroen Scholten
+  description: Installeert MariaDB, maakt database en gebruiker aan
+  license: MIT
+  min_ansible_version: 2.10
+  platforms:
+    - name: Ubuntu
+      versions:
+        - 22.04
+        - 24.04
+    - name: Debian
+      versions:
+        - bullseye
+        - bookworm
+  galaxy_tags:
+    - mariadb
+    - mysql
+    - database
+    - ansible
+
+dependencies: []

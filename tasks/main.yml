@@ -1,0 +1,32 @@
+- name: Installeer vereisten voor Python MySQL modules
+  ansible.builtin.apt:
+    name: python3-pymysql
+    state: present
+    update_cache: true
+
+- name: Installeer mariadb-server
+  ansible.builtin.apt:
+    name: mariadb-server
+    state: present
+    update_cache: true
+  notify: Restart MariaDB
+
+- name: Controleer of mariadb poort 3306 luistert
+  ansible.builtin.shell: ss -tuln | grep ':3306'
+  register: mariadb_port_check
+  changed_when: false
+  failed_when: mariadb_port_check.rc != 0
+
+- name: Maak MySQL database aan
+  community.mysql.mysql_db:
+    name: "{{ mysql_database }}"
+    state: present
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+
+- name: Maak MySQL gebruiker aan
+  community.mysql.mysql_user:
+    name: "{{ mysql_user }}"
+    password: "{{ mysql_password }}"
+    priv: "{{ mysql_database }}.*:ALL"
+    state: present
+    login_unix_socket: /var/run/mysqld/mysqld.sock
